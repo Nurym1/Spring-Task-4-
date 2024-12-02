@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Twitter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+      color: black;
+    }
+
+    header {
+      background-color: black;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 24px;
+    }
+
+    #app {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      max-width: 500px;
+      margin: 20px auto;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-field {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      color: black;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: #1da1f2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0d8b9d;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    X.com
+  </header>
+
+  <div id="app">
+    <div id="register-page" class="page active">
+      <h2>Create an Account</h2>
+      <input class="input-field" type="text" id="fullName" placeholder="Full Name">
+      <input class="input-field" type="email" id="email" placeholder="Email">
+      <input class="input-field" type="password" id="password" placeholder="Password">
+      <input class="input-field" type="text" id="country" placeholder="Country">
+      <input class="input-field" type="date" id="birthDate">
+      <button id="register-button">Register</button>
+    </div>
+
+    <div id="login-page" class="page">
+      <h2>Log in to X.com</h2>
+      <input class="input-field" type="email" id="login-email" placeholder="Email">
+      <input class="input-field" type="password" id="login-password" placeholder="Password">
+      <button id="login-button">Login</button>
+    </div>
+
+    <div id="profile-page" class="page">
+      <h2>Your Profile</h2>
+      <div>
+        <p><strong>Name:</strong> <span id="profile-name"></span></p>
+        <p><strong>Email:</strong> <span id="profile-email"></span></p>
+        <p><strong>Country:</strong> <span id="profile-country"></span></p>
+        <p><strong>Birth Date:</strong> <span id="profile-birthDate"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const registerPage = document.getElementById('register-page');
+    const loginPage = document.getElementById('login-page');
+    const profilePage = document.getElementById('profile-page');
+    const registerButton = document.getElementById('register-button');
+    const loginButton = document.getElementById('login-button');
+
+    registerButton.addEventListener('click', () => {
+      const fullName = document.getElementById('fullName').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const country = document.getElementById('country').value;
+      const birthDate = document.getElementById('birthDate').value;
+
+      if (fullName && email && password && country && birthDate) {
+        localStorage.setItem('user', JSON.stringify({ fullName, email, password, country, birthDate }));
+
+        registerPage.classList.remove('active');
+        loginPage.classList.add('active');
+      } else {
+        alert('Please fill out all fields');
+      }
+    });
+
+    loginButton.addEventListener('click', () => {
+      const loginEmail = document.getElementById('login-email').value;
+      const loginPassword = document.getElementById('login-password').value;
+
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (user && user.email === loginEmail && user.password === loginPassword) {
+        loginPage.classList.remove('active');
+        profilePage.classList.add('active');
+        
+        document.getElementById('profile-name').textContent = user.fullName;
+        document.getElementById('profile-email').textContent = user.email;
+        document.getElementById('profile-country').textContent = user.country;
+        document.getElementById('profile-birthDate').textContent = user.birthDate;
+      } else {
+        alert('Invalid email or password');
+      }
+    });
+  </script>
+
+</body>
+</html>
